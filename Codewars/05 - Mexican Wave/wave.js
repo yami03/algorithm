@@ -30,12 +30,30 @@ function wave(word){
 result = ["Hello", "hEllo", "heLlo", "helLo", "hellO"];
 assertDeepEquals(wave("hello"), result);
 
+result = ["Codewars", "cOdewars", "coDewars", "codEwars", "codeWars", "codewArs", "codewaRs", "codewarS"];
+assertDeepEquals(wave("codewars"), result);
+
+result = [];
+assertDeepEquals(wave(""), result);
+
+result = ["Two words", "tWo words", "twO words", "two Words", "two wOrds", "two woRds", "two worDs", "two wordS"];
+assertDeepEquals(wave("two words"), result);
+
+result = [" Gap ", " gAp ", " gaP "];
+assertDeepEquals(wave(" gap "), result);
+
 function assertDeepEquals(ret, correctRet) {
     for (let index = 0; index < correctRet.length; index++) {
         if (ret[index] !== correctRet[index]) {
-            return console.log(`${correctRet}`);
+            return console.log("you return", ret, ", Should return", correctRet);
         } else if (index == correctRet.length-1){
-            return console.log(`${correctRet}`);
+            return console.log("Value deep equals", correctRet);
         }
     }
 }
+
+/* Best Solution 
+
+var wave = w => [...w].map((a, i) => w.slice(0, i) + a.toUpperCase() + w.slice(i + 1)).filter(a => a != w)
+
+*/
