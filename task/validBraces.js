@@ -19,43 +19,75 @@
 // 아래의 export default 키워드는 '아직' 신경쓰지 않으셔도 됩니다. :)
 function validBraces(braces){
   // Complete the validBraces function.
-  const opening = ['(','{','['];
-  const closing = [')','}',']'];
+  const openings = ['(', '{', '['];
+  const openings = [')', '}', ']'];
   let match = 0;
   let groupClose = 0;
   let groupMiddle = 0;
+  let groupCloseloop = 0;
 
   for (let i = 0; i < braces.length; i++) {
-    match = opening.findIndex(opening => {
+    match = openings.findIndex(opening => {
       return opening === braces[i];
     });
 
-    //바로 다음 숫자에 닫는 괄호가 있을 경우 
-    if (braces[i + 1] === closing[match]) {
-      i++ 
-    //닫는 괄호가 그룹 형태일 때 
-    }else{
-      
-      //가장가까운 닫기를 찾는다.. 
-      for (let j = i + 1; j < braces.length; j++) {
-        if (braces[j] === closing[match]) {
-          groupClose = j;
-        } else if (j === braces.length-1){ 
-          //끝까지 돌았는데 닫는 괄호를 못찾을 경우 
-          return false;
+    //index 0이나 짝수번째에서 여는 괄호를 못찾은 경우 
+    if (match === -1) {
+      return false;
+
+      //바로 다음 숫자에 닫는 괄호가 있을 경우 
+    } else if (braces[i + 1] === closings[match]) {
+      i++
+
+      //괄호가 그룹 형태일 때 
+    } else {
+
+      //가장가까운 닫는 괄호를 찾는다.. 
+      outer: for (let j = i + 1; j < braces.length; j++) {
+        for (let k = 0; k < openings.length; k++) {
+          if (braces[j] === openings[k]) {
+            groupMiddle = j;
+            break outer;
+          } else if (j === braces.length - 1) {
+            return false;
+          }
         }
       };
 
-      //그룹형태를 서로 값이 같은지 매치 시킨다. 
-      groupMiddle = abs((i+ groupClose)/2);
-      for (let k = i + 1; k <= groupMiddle; k++) {
-          
-      }
+      //그룹형태의 괄호들을 매치 시킨다.
+      groupClose, groupCloseloop = groupMiddle * 2 - i - 1;
 
+      for (let l = i; l < groupMiddle; l++) {
+
+        if (l !== i) {
+          match = openings.findIndex(opening => {
+            return opening === braces[l];
+          });
+
+          if (match === -1) {
+            return false;
+          }
+
+        } else if (braces[groupCloseloop] === openings[match]) {
+
+          groupCloseloop--
+
+        } else {
+          return false;
+        }
+      }
+      i = groupClose;
     }
-    console.log(groupClose);
-    break;
   }
+  return true;
 }
 
-validBraces('({})[]');
+assertSimilar(validBraces('(((((((((((())))))))))))'), true);
+assertSimilar(validBraces('())({}}{()][]['), false);
+
+function assertSimilar(ret, correctRet) {
+  if (ret === correctRet) {
+    return console.log(`success: ${ret} as expected.`);
+  }
+  console.warn(`failed: ${correctRet}, got ${ret} instead.`);
+}
