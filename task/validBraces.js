@@ -20,7 +20,7 @@
 function validBraces(braces){
   // Complete the validBraces function.
   const openings = ['(', '{', '['];
-  const openings = [')', '}', ']'];
+  const closings = [')', '}', ']'];
   let match = 0;
   let groupClose = 0;
   let groupMiddle = 0;
@@ -44,8 +44,8 @@ function validBraces(braces){
 
       //가장가까운 닫는 괄호를 찾는다.. 
       outer: for (let j = i + 1; j < braces.length; j++) {
-        for (let k = 0; k < openings.length; k++) {
-          if (braces[j] === openings[k]) {
+        for (let k = 0; k < closings.length; k++) {
+          if (braces[j] === closings[k]) {
             groupMiddle = j;
             break outer;
           } else if (j === braces.length - 1) {
@@ -68,7 +68,7 @@ function validBraces(braces){
             return false;
           }
 
-        } else if (braces[groupCloseloop] === openings[match]) {
+        } else if (braces[groupCloseloop] === closings[match]) {
 
           groupCloseloop--
 
