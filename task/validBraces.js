@@ -31,7 +31,7 @@ function validBraces(braces){
       return opening === braces[i];
     });
 
-    //index 0이나 짝수번째에서 여는 괄호를 못찾은 경우 
+    //여는 괄호를 못찾은 경우 
     if (match === -1) {
       return false;
 
@@ -55,7 +55,8 @@ function validBraces(braces){
       };
 
       //그룹형태의 괄호들을 매치 시킨다.
-      groupClose, groupCloseloop = groupMiddle * 2 - i - 1;
+      groupClose = groupMiddle * 2 - i - 1;
+      groupCloseloop = groupClose;
 
       for (let l = i; l < groupMiddle; l++) {
 
@@ -84,6 +85,12 @@ function validBraces(braces){
 
 assertSimilar(validBraces('(((((((((((())))))))))))'), true);
 assertSimilar(validBraces('())({}}{()][]['), false);
+assertSimilar(validBraces('[]{}[](){}()[](){}'), true);
+assertSimilar(validBraces('[]{}[](){}()[](){}{'), false);
+assertSimilar(validBraces('()[()]{{()}}(((((((((((())))))))))))'), true);
+assertSimilar(validBraces('()[()]{{()}}(((((((((((()))))))))))'), false);
+assertSimilar(validBraces('{[]}([{}])[][[({})]]()([[{}]])[]{(())}'), true);
+assertSimilar(validBraces('{[]}([{}])[][[({})]]()([[{}]])[]{(())'), false);
 
 function assertSimilar(ret, correctRet) {
   if (ret === correctRet) {
