@@ -18,26 +18,46 @@
 
 function maxSubarraySum(arr) {
   // Complete the maxSubarraySum function.
-  let total = 0;
   let newArr = [];
+  let total = arr[0]+arr[1];
+  let compareNum = 0;
 
   // 원소 모두가 양수로만, 음수로만 구성되어 있는지 판별
   const negative = arr.every(elem => elem <= 0);
   const positive = arr.every(elem => elem >= 0);  
   
   if (negative) {
-    console.log(0);
+    return 0;
   }
   if (positive) {
-    console.log(arr.reduce((prev, curr) => prev + curr));
+    return arr.reduce((prev, curr) => prev + curr);
   }
 
   //가장 큰 연속된 배열 구하기 
-  //slice를 이용해 구한다'ㅁ'... 
-  
+  for (let i = 0; i < arr.length; i++) {
+    
+    for (let j = i+2; j <= arr.length; j++) {    
+      newArr = arr.slice(i,j);
+      compareNum = newArr.reduce((prev, curr) => prev + curr);
+    
+      if (total < compareNum) {
+        total = compareNum;
+      }
+    }
 
+  }
+  return total; 
 }
 
-maxSubarraySum([1,2,3,4])
+assertSimilar(maxSubarraySum([]), 0);
+assertSimilar(maxSubarraySum([1, 2, 3, 4, 5]), 15);
+assertSimilar(maxSubarraySum([-47, -19, -2, 36, -30, 40, -37, -28, -36, -35, 20, 25, 45, -12, -32, -33, 24, -8, -40, 11, 34, 38, -31, 20, 49, -6, -24, -48, -50, -33, 41, -28, 35, 7, -2, 15, 42, -25, -29, 36, -42, 16, -30, -23, -35, -21, -34, -19, 38, 13, -15, 29, -21, 11, 8, 8, 20, 23, -16]), 121);
+assertSimilar(maxSubarraySum([-15, 36, 40, 43, 0, -49, 7, -30, -34, -27, 39, -22, -45, 48]), 119);
+assertSimilar(maxSubarraySum([-1, -2, -3, 2, -4]), -1);
 
-
+function assertSimilar(ret, correctRet) {
+  if (ret === correctRet) {
+    return console.log(`success: ${ret} as expected.`);
+  }
+  console.warn(`failed: ${correctRet}, got ${ret} instead.`);
+}
