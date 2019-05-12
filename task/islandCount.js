@@ -43,12 +43,14 @@ function countIslands(mapStr) {
   for (let i = 0; i < arrRow.length; i++) {
 
     for (let j = 0; j < arrRow[i].length; j++) {
+
       if (arrRow[i][j] === '0') {
         ZeroIdx.push(j);
         continuousNum.push(j);
+      } 
       
-      } else if ((arrRow[i][j] === '.' && continuousNum.length !== 0) || (j === (arrRow[i].length - 1) && continuousNum.length !== 0)) {
-        console.log(`i값과 j값은 ${i}/${j}`);
+      if ((arrRow[i][j] === '.' && continuousNum.length !== 0) || (j === (arrRow[i].length - 1) && continuousNum.length !== 0)) {
+        //console.log(`i값과 j값은 ${i}/${j}`);
 
         if (beforeZeroIdx.length === 0) { //2차원 지도의 첫번째 줄이거나 이전 줄이 ...의 연속일 때 
           totalCount += 1;
@@ -79,5 +81,5 @@ function countIslands(mapStr) {
 
 
 //console.log(countIslands('00...0'));
-console.log(countIslands('00...0\n0...00\n......\n0.0.0.\n0.....'));
+console.log(countIslands('0...0\n0...0\n00000'));
 //[ '00...0', '0...00', '......', '0.0.0.', '0.....' ] 
