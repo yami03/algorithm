@@ -56,13 +56,11 @@ function countIslands(mapStr) {
 
     }
 
-    //row 조사가 끝나면 
+    //mapObject 객체로 만들기
     if (continuity.length) line.push(continuity);
     mapObject['line' + key] = line;
     line = [];
     continuity = [];
-
-
   }
 
   /*
@@ -70,10 +68,45 @@ function countIslands(mapStr) {
   line1: [ [ '0' ], [ '4' ] ],
   line2: [ [ '0', '1', '2', '3', '4' ] ] }
   */
+  //동일한 수가 있는지 비교하기
+  debugger;
+  for (let j = 0; j < Object.keys(mapObject).length; j++) { // line0: [ [ '0', '1' ], [ '3', 4' ] ] ; line1 / line2 
 
-  
+    for (let k = 0; k < mapObject['line' + j].length; k++) { //[ '0', '1' ] // ['3', 4] 2번돈다 'ㅁ' 
+      
+      if (mapObject['line' + j][k].includes('add')) continue;
 
+      let compareArr = mapObject['line' + j][k];
+      let newCompareArr = [];
+      for (let l = j + 1; l < Object.keys(mapObject).length; l++) { //다음줄 이중배열에 접근 line1: [ [ '0' ], [ '4' ] ] 
+        
+        for (let m = 0; m < mapObject['line' + l].length; m++) { //다음줄 배열의 배열  line1:[ '0' ]
 
+          for (let n = 0; n < compareArr.length; n++) { //비교할요소의 원소 개수 line0: '0', '1' 
+           
+            if (mapObject['line' + l][m].includes(compareArr[n])) { //다음줄 요소에 비교대상 요소가 있다면 
+              newCompareArr.concat(mapObject['line' + l][m]);
+              
+              if (mapObject['line' + l][m].includes('add')) {
+                addState = true;
+              
+              } else {
+                mapObject['line' + l][m].push('add');
+              }
+            }
+            
+          }
+        }
+        //다음줄 라인 검수가 끝나면 
+        compareArr = newCompareArr;
+        compareArr = [];
+      }
+      //배열의 배열 요소의 검수가 끝나믄 'ㅁ' / 
+      if (!addState) count = count + 1;
+      addState = false;
+    }
+  }
+  return count;
 }
 
-countIslands('00.00\n0...0\n00000');
+console.log(countIslands('00.00\n0...0\n00000'));
