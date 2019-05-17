@@ -48,7 +48,7 @@ function countIslands(mapStr) {
 
         continuity.push(i);
 
-      } else if (mapArr[key][i] === '.' && continuity.length){
+      } else if (mapArr[key][i] === '.' && continuity.length) {
 
         line.push(continuity);
         continuity = [];
@@ -63,50 +63,51 @@ function countIslands(mapStr) {
     continuity = [];
   }
 
-  /*
-  { line0: [ [ '0', '1' ], [ '3', 4' ] ],
-  line1: [ [ '0' ], [ '4' ] ],
-  line2: [ [ '0', '1', '2', '3', '4' ] ] }
-  */
   //동일한 수가 있는지 비교하기
-  debugger;
-  for (let j = 0; j < Object.keys(mapObject).length; j++) { // line0: [ [ '0', '1' ], [ '3', 4' ] ] ; line1 / line2 
+  const mapObjectKeys = Object.keys(mapObject);
 
-    for (let k = 0; k < mapObject['line' + j].length; k++) { //[ '0', '1' ] // ['3', 4] 2번돈다 'ㅁ' 
+  for (let j = 0; j < mapObjectKeys.length; j++) { 
+
+    let mapObjectLine = mapObject['line' + j];
+    for (let k = 0; k < mapObjectLine.length; k++) {  
       
-      if (mapObject['line' + j][k].includes('add')) continue;
+      if (mapObjectLine[k].includes('add')) continue;
 
-      let compareArr = mapObject['line' + j][k];
+      let compareArr = mapObjectLine[k];
       let newCompareArr = [];
-      for (let l = j + 1; l < Object.keys(mapObject).length; l++) { //다음줄 이중배열에 접근 line1: [ [ '0' ], [ '4' ] ] 
+      for (let l = j + 1; l < mapObjectKeys.length; l++) { //다음줄 이중배열에 접근
         
-        for (let m = 0; m < mapObject['line' + l].length; m++) { //다음줄 배열의 배열  line1:[ '0' ]
+        for (let m = 0; m < mapObject['line' + l].length; m++) { //다음줄 배열의 배열
 
-          for (let n = 0; n < compareArr.length; n++) { //비교할요소의 원소 개수 line0: '0', '1' 
-           
-            if (mapObject['line' + l][m].includes(compareArr[n])) { //다음줄 요소에 비교대상 요소가 있다면 
-              newCompareArr.concat(mapObject['line' + l][m]);
-              
-              if (mapObject['line' + l][m].includes('add')) {
+          for (let n = 0; n < compareArr.length; n++) { //비교할요소의 원소 개수 
+            let nextArr = mapObject['line' + l][m];
+
+            if (nextArr.includes(compareArr[n])) { //다음줄 요소에 비교대상 요소가 있다면 
+
+              if (nextArr.includes('add')) {
+
                 addState = true;
-              
+                
               } else {
-                mapObject['line' + l][m].push('add');
+
+                newCompareArr = newCompareArr.concat(nextArr);
+                nextArr.push('add');
               }
-            }
-            
+              break;
+            } 
           }
         }
         //다음줄 라인 검수가 끝나면 
         compareArr = newCompareArr;
-        compareArr = [];
+        newCompareArr = [];
       }
-      //배열의 배열 요소의 검수가 끝나믄 'ㅁ' / 
-      if (!addState) count = count + 1;
+
+      //배열의 배열 요소의 검수가 끝나면 
+      if (addState === false) count++;
       addState = false;
     }
   }
   return count;
 }
 
-console.log(countIslands('00.00\n0...0\n00000'));
+console.log(countIslands('0..0\n0..0\n00000'));
