@@ -30,56 +30,112 @@
 
 // 아래의 export default 키워드는 '아직' 신경쓰지 않으셔도 됩니다. :)
 function countIslands(mapStr) {
-  // Complete the countIslands function.
-  let totalCount = 0;
-  const arrRow = mapStr.split('\n');
-  // 이전 row의 index 값 
-  let beforeZeroIdx = [];
-  // 현재 row의 index 값
-  let ZeroIdx = [];
-  // 연속되는 숫자의 index값
-  let continuousNum = [];
+  const mapArr = mapStr.split('\n');
+  let mapObject = {};
+  let addState = false;
+  let count = 0;
 
-  for (let i = 0; i < arrRow.length; i++) {
+  // mapObject 객체에 line별로 '0'의 자리를 추가해 준다. 
+  for (const key in mapArr) {
 
-    for (let j = 0; j < arrRow[i].length; j++) {
+    let line = [];
+    let continuity = [];
 
-      if (arrRow[i][j] === '0') {
-        ZeroIdx.push(j);
-        continuousNum.push(j);
-      } 
-      
-      if ((arrRow[i][j] === '.' && continuousNum.length !== 0) || (j === (arrRow[i].length - 1) && continuousNum.length !== 0)) {
-        //console.log(`i값과 j값은 ${i}/${j}`);
+    //mapArr의 원소의 '0'을 찾는다.
+    for (const i in mapArr[key]) {
 
-        if (beforeZeroIdx.length === 0) { //2차원 지도의 첫번째 줄이거나 이전 줄이 ...의 연속일 때 
-          totalCount += 1;
-          
-        } else {
-          
-          outer: for (let k = 0; k < beforeZeroIdx.length; k++) {
-            for (let l = 0; l < continuousNum.length; l++) {
-              if (beforeZeroIdx[k] === continuousNum[l]) {
-                break outer;
+      if (mapArr[key][i] === '0') {
+
+        continuity.push(i);
+
+      } else if (mapArr[key][i] === '.' && continuity.length) {
+
+        line.push(continuity);
+        continuity = [];
+
+      }
+    }
+
+    //mapObject 객체로 만들기
+    if (continuity.length) line.push(continuity);
+    mapObject['line' + key] = line;
+    line = [];
+    continuity = [];
+
+  }
+
+  //동일한 수가 있는지 비교하기 - 비교후 같은 수가 있는 경우 배열에 add를 추가해 준다. 
+  const mapObjectKeys = Object.keys(mapObject);
+
+  for (let j = 0; j < mapObjectKeys.length; j++) {
+
+    let mapObjectLine = mapObject['line' + j];
+
+    for (let k = 0; k < mapObjectLine.length; k++) {
+
+      if (mapObjectLine[k].includes('add')) continue;
+
+      let compareArr = mapObjectLine[k];
+      let newCompareArr = [];
+
+      //다음라인의 value
+      for (let l = j + 1; l < mapObjectKeys.length; l++) {
+
+        if (!mapObject['line' + l].length) break;
+
+        //다음줄 배열의 배열
+        for (let m = 0; m < mapObject['line' + l].length; m++) {
+
+          //비교할 요소의 원소 개수
+          for (let n = 0; n < compareArr.length; n++) {
+
+            let nextArr = mapObject['line' + l][m];
+
+            //다음줄 요소에 비교대상 요소가 있다면
+            if (nextArr.includes(compareArr[n])) {
+
+              if (nextArr.includes('add')) {
+
+                addState = true;
+
+              } else {
+
+                newCompareArr = newCompareArr.concat(nextArr);
+                nextArr.push('add');
+
               }
-            }
-            if (k === beforeZeroIdx.length - 1) {
-              totalCount += 1;
+              break;
             }
           }
         }
-        continuousNum = [];
-      } 
-      //console.log(`${i},${j}와 count는 ${totalCount}`);
+
+        //다음줄 검수가 끝나면 
+        compareArr = newCompareArr;
+        newCompareArr = [];
+
+      }
+
+      //배열의 배열 요소의 검수가 끝나면 
+      if (addState === false) count++;
+      addState = false;
+
     }
-    beforeZeroIdx = ZeroIdx;
-    ZeroIdx = [];
-    continuousNum = [];
   }
-  return totalCount;
+  return count;
 }
 
 
-//console.log(countIslands('00...0'));
-console.log(countIslands('0...0\n0...0\n00000'));
-//[ '00...0', '0...00', '......', '0.0.0.', '0.....' ] 
+assertSimilar(countIslands('0...0\n0...0\n00000'), 1);
+assertSimilar(countIslands('00...0\n0...00\n......\n0.0.0.\n0.....'), 5);
+assertSimilar(countIslands('00000000000000000\n.....0..........0\n00..000.........0\n0...0...........0\n0...0...........0\n00000000000000000'), 1);
+assertSimilar(countIslands('..000.\n..000.\n..000.\n.0....\n..000.'), 3);
+assertSimilar(countIslands('..000.0....0..00.\n..000...0.000.0.0\n00.0.000.....000.\n.0.00.0.000.0....\n..0000..0....000.'), 11);
+assertSimilar(countIslands('....0000000000000000\n....000000..........\n..0000...........0..\n....000.........00..\n.0000...........0...\n....................\n..00000000000000....\n....0000000.........\n......00............\n.00000.......0......\n.0000........0......\n.000000...0000000...\n...0000000......0000'), 5);
+assertSimilar(countIslands('.0.0.000.\n.0.0.0...\n.000.000.\n.........\n.000.000.\n...0.0.0.\n.000.0.0.\n.........'), 4);
+
+function assertSimilar(ret, correctRet) {
+  if (ret === correctRet) {
+    return console.log(`success: ${ret} as expected.`);
+  }
+  console.warn(`failed: ${correctRet}, got ${ret} instead.`);
+}
