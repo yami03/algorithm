@@ -18,7 +18,7 @@ function orderWeight(strng) {
   let result = [];
   
   let sum = arr.map(el => {
-    return [...el].reduce((total, current) => Number(total) + Number(current));
+    return [...el].reduce((total, current) => Number(total) + Number(current),0);
   });
 
   for(let i = 0; i < arr.length; i++) {
@@ -28,6 +28,10 @@ function orderWeight(strng) {
         if(sum[i] === sum[j]) {
           if(arr[i] > arr[j]) {
             count += 1;
+          }else if(arr[i] === arr[j]) {
+            if(i > j) {
+              count += 1;
+            }
           }
         } else if(sum[i] > sum[j]) {
           count += 1;
@@ -41,4 +45,12 @@ function orderWeight(strng) {
   return result.join(' ');
 }
 
-console.log(orderWeight("56 65 74 100 99 68 86 180 90"));
+assertEquals(orderWeight("103 123 4444 99 2000"), "2000 103 123 4444 99");
+assertEquals(orderWeight("2000 10003 1234000 44444444 9999 11 11 22 123"), "11 11 2000 10003 22 123 1234000 44444444 9999");
+
+function assertEquals(ret, correctRet) {
+  if (ret === correctRet) {
+    return console.log(`success: ${ret} as expected.`);
+  }
+  console.warn(`failed: ${correctRet}, got ${ret} instead.`);
+}
