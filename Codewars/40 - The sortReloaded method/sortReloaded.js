@@ -34,16 +34,18 @@ Array.prototype.sortReloaded = function (type) {
   }
 
 }
-22
 
 assertEquals(typeof Array.prototype.sortReloaded , 'function');
-assertDeepEquals([3,1,5,3,6,1,2].sortReloaded('asc'), [1,1,2,3,3,5,6]);
-assertDeepEquals([2,3,4,3,2,9,1].sortReloaded('desc'), [9,4,3,3,2,2,1]);
-assertSimilar([2,3].sortReloaded('foo') , false);
-assertDeepEquals([4,7,2].sortReloaded() , [2,4,7]);
+assertEquals([3,1,5,3,6,1,2].sortReloaded('asc'), [1,1,2,3,3,5,6]);
+assertEquals([2,3,4,3,2,9,1].sortReloaded('desc'), [9,4,3,3,2,2,1]);
+assertEquals([2,3].sortReloaded('foo') , false);
+assertEquals([4,7,2].sortReloaded() , [2,4,7]);
 
 function assertEquals(ret, correctRet) {
-  if (ret === correctRet) {
+  let newRet = Array.isArray(ret) ? ret.join(' ') : ret;
+  let newCorrectRet = Array.isArray(correctRet) ? ret.join(' ') : correctRet;
+
+  if (newRet === newCorrectRet) {
     return console.log(`success: ${ret} as expected.`);
   }
   console.warn(`failed: ${correctRet}, got ${ret} instead.`);
