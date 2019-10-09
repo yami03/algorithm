@@ -1,3 +1,5 @@
+// https://app.codility.com/demo/results/trainingYVXVR4-PY4/
+
 // The difference between the two parts is the value of:
 
 // |(A[0] + A[1] + ... + A[P − 1]) − (A[P] + A[P + 1] + ... + A[N − 1])|
@@ -40,12 +42,13 @@
 function solution(A) {
   // write your code in JavaScript (Node.js 8.9.4)
   const total = A.reduce((prev, current) => prev + current);
-  let min = total - A[0] * 2;
-  let prev = 0;
+  let min = Math.abs(total - A[0] * 2);
+  let front = 0;
 
   for (let i = 0; i < A.length - 1; i++) {
-    let cal = Math.abs(total - prev - A[i] * 2);
-    console.log(cal);
+    front = front + A[i] * 2;
+    const cal = Math.abs(total - front);
+
     if (min > cal) min = cal;
   }
 
