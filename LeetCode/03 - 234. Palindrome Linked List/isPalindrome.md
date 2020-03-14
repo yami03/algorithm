@@ -61,6 +61,8 @@ var isPalindrome = function(head) {
 
 ## 결과
 
+![image02](./assets/image02.png)
+
 Runtime: 64 ms, faster than 69.68% of JavaScript online submissions for Palindrome Linked List.
 
 Memory Usage: 39.9 MB, less than 66.67% of JavaScript online submissions for Palindrome Linked List.
