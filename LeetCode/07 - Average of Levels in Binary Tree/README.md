@@ -44,8 +44,6 @@ var averageOfLevels = function(root) {
       result[key] = value.reduce((prev, next) => prev + next)/value.length;
     }
     
-    console.log(root);
-    
     return result;
 };
 ```
