@@ -29,7 +29,6 @@ var averageOfLevels = function(root) {
     const result = [];
     
     function recursion(node, level) {
-        console.log([node].length);
         !depthMap.has(level) ? depthMap.set(level, [node.val]) : depthMap.get(level).push(node.val);
         
         if(node.left) recursion(node.left, level + 1)
