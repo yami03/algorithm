@@ -56,7 +56,6 @@ var t2 = {
 
 var mergeTrees = function (t1, t2) {
   function accessLevel(tree) {
-    debugger;
     const values = [];
     let queue = [tree];
     let nodeCount = queue.length;
