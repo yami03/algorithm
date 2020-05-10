@@ -97,3 +97,18 @@ console.log(mergeTrees(t1, t2))
 
 ## 결과
 
+return 값이 왜 자꾸 `[undefined]` 인지 한참 찾아봄
+이유는 주석을 무시한 탓이였다.
+```js
+/**
+ * @param {TreeNode} t1
+ * @param {TreeNode} t2
+ * @return {TreeNode}
+ */
+ ```
+ 
+ 이전 leetcode 문제처럼 배열이 반환하는줄 🙂
+ 다시 풀어야한다. 
+ 
+ {TreeNode}로 반환하는게 맞는거 같다. 왜냐면 마지막에 null null이 인자로 들어오는걸 어찌 처리하지? 하고 고민이 많이되었는데..ㅠ 
+ `{TreeNode}` 로 반환된다면 고민할 필요없음.. 
